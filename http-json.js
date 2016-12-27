@@ -1,31 +1,30 @@
 'use strict';
 const http = require('http');
 const portNumber = process.argv[2];
-const strftime = require('strftime');
 const url = require('url');
 
 let server = http.createServer(function (req, res) {
-  res.statusCode = 400;
-  if (req.method === 'GET') {
-    let edp = url.parse(req.url, true);
-    if (edp.pathname === '/api/parsetime' || edp.pathname === '/api/unixtime') {
-      let date = new Date(edp.query.iso);
-      if (!isNaN(date.getTime())) { // True if date is valid, i.e., parsed correctly
-        let resJSON = (edp.pathname === '/api/parsetime')?
-        {
-          'hour': date.getHours(),
-          'minute': date.getMinutes(),
-          'second': date.getSeconds()
-        }:
-        {
-          'unixtime': date.getTime()
-        };
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify(resJSON));
-      }
+    res.statusCode = 400;
+    if (req.method === 'GET') {
+        let edp = url.parse(req.url, true);
+        if (edp.pathname === '/api/parsetime' || edp.pathname === '/api/unixtime') {
+            let date = new Date(edp.query.iso);
+            if (!isNaN(date.getTime())) { // True if date is valid, i.e., parsed correctly
+                let resJSON = (edp.pathname === '/api/parsetime') ? {
+                    'hour': date.getHours(),
+                    'minute': date.getMinutes(),
+                    'second': date.getSeconds()
+                } : {
+                    'unixtime': date.getTime()
+                };
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                res.write(JSON.stringify(resJSON));
+            }
+        }
     }
-  }
-  res.end();
+    res.end();
 });
 server.listen(portNumber);
 

@@ -1,5 +1,4 @@
 'use strict';
-const net = require('net');
 const http = require('http');
 const fs = require('fs');
 const portNumber = process.argv[2];
